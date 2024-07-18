@@ -1,12 +1,24 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 
+import logoIcon from '/logo.webp'
 
 export default function Layout() {
+    const navigate = useNavigate();
+    let hasUsername = localStorage.getItem('username') !== null
+
+    const logOutButtonClick = () => {
+        localStorage.removeItem('username')
+        navigate('/')
+    }
+
     return (
-        <div className="container-fluid d-flex flex-column bg-primary-subtle vh-100 p-0">
+        <div className="container-fluid d-flex flex-column bg-primary-subtle min-vh-100 p-0">
             {/*  navBar */}
-            <div className="d-flex w-100 bg-primary text-white">
-                <h1 className="p-1 ms-5">MessageMe</h1>
+            <div className="d-flex justify-content-around align-items-center w-100 bg-primary text-white">
+                <Link to='/'>
+                    <img src={logoIcon} alt="" style={{width:"75px"}} />
+                </Link>
+                {hasUsername && <button type="button" className="btn btn-secondary btn-sm" onClick={logOutButtonClick}>Log out</button>}
             </div>
 
             <main className="flex-fill w-100 d-flex flex-column justify-content-center align-items-center p-5">

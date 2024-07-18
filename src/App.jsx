@@ -1,14 +1,21 @@
-import { redirect } from "react-router-dom";
+import { useState, useEffect } from "react";
+
 import SignIn from './pages/SignIn.jsx'
-// import SignUp from './pages/SignUp.jsx'
+import MainScreen from './pages/MainScreen.jsx'
 
 function App() {
 
-  let hasUsername = localStorage.getItem('username') !== null
+  const [hasUsername, setHasUsername] = useState(false)
+
+  useEffect(() => {
+    setHasUsername(localStorage.getItem('username') !== null)
+  }, [])
 
   return (
     <>
+      {/* this is App */}
       {!hasUsername && <SignIn />}
+      {hasUsername && <MainScreen />}
     </>
   )
 }

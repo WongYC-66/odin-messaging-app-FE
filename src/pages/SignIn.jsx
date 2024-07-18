@@ -1,6 +1,7 @@
 import { Form, Link } from "react-router-dom";
 
 export default function SignIn() {
+    
     return (
         <div className="">
             <h1 className="text-primary">Hang out </h1>
@@ -10,12 +11,12 @@ export default function SignIn() {
             <p className="text-primary-emphasis mb-3 w-50">MessageMe makes it easy to send a chat message to your friend or even a stranger! </p>
 
             <Form method="POST">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="username" name='username' placeholder="" />
+                <div className="form-floating mb-3">
+                    <input type="text" className="form-control" id="username" name='username' placeholder="" required/>
                     <label htmlFor="username">username</label>
                 </div>
-                <div class="form-floating">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="" />
+                <div className="form-floating">
+                    <input type="password" className="form-control" id="password" name="password" placeholder="" required/>
                     <label htmlFor="password">Password</label>
                 </div>
 
