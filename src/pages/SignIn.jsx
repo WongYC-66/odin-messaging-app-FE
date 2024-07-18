@@ -1,4 +1,27 @@
-import { Form, Link } from "react-router-dom";
+import { Form, Link, redirect } from "react-router-dom";
+
+export async function action({ request }) {
+
+    const formData = await request.formData();
+    const userInfo = Object.fromEntries(formData);
+    console.log(userInfo)
+
+    // To-do
+    // const response = await createContact(userInfo); // hook to API
+    const response = {
+        msg: 'success',
+        user: JSON.stringify({
+            username: userInfo.username
+        })
+    };
+
+    if (response && response.msg == 'success') {
+        localStorage.setItem('user', response.user)
+        return redirect('/')
+    } else {
+        throw new Error("Login failed, please try again")
+    }
+}
 
 export default function SignIn() {
     
@@ -12,11 +35,11 @@ export default function SignIn() {
 
             <Form method="POST">
                 <div className="form-floating mb-3">
-                    <input type="text" className="form-control" id="username" name='username' placeholder="" required/>
+                    <input type="text" className="form-control" id="username" name='username' placeholder="" required />
                     <label htmlFor="username">username</label>
                 </div>
                 <div className="form-floating">
-                    <input type="password" className="form-control" id="password" name="password" placeholder="" required/>
+                    <input type="password" className="form-control" id="password" name="password" placeholder="" required />
                     <label htmlFor="password">Password</label>
                 </div>
 
@@ -26,7 +49,7 @@ export default function SignIn() {
 
             <p className="mt-3">
                 <span className="my-1"> Doesn't have account ? </span>
-                <Link to={"sign-up"} className="text-decoration-none">
+                <Link to={"../sign-up"} className="text-decoration-none">
                     Sign Up here
                 </Link>
 

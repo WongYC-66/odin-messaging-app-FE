@@ -4,21 +4,22 @@ export async function action({ request, params }) {
     const formData = await request.formData();
     const userInfo = Object.fromEntries(formData);
     console.log(userInfo)
-
+    
+    // To-do
     // const response = await createContact(userInfo); // hook to API
     const response = {
         msg: 'success',
         user: {
-            username: userInfo.username
+            username : userInfo.username
         }
     };
     
-    if(response && response.msg == 'success'){
-        localStorage.setItem('username', response.user.username)
+    if (response && response.msg == 'success') {
+        localStorage.setItem('user', JSON.stringify(response.user))
+        return redirect('/')
+    } else {
+        throw new Error("Login failed, please try again")
     }
-
-    // return response;
-    return redirect('/')
 }
 
 

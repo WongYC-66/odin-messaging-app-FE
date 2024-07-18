@@ -1,21 +1,33 @@
-import { useState, useEffect } from "react";
+import { redirect, useLoaderData, useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
 
-import SignIn from './pages/SignIn.jsx'
 import MainScreen from './pages/MainScreen.jsx'
+import { UserContext } from './layout/layout.jsx'
+
+export async function loader() {
+  return null
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (!user) return redirect('sign-in')
+  // window.location.reload()
+  return user
+}
 
 function App() {
 
-  const [hasUsername, setHasUsername] = useState(false)
+  const navigate = useNavigate()
+  const { setUser } = useContext(UserContext)
 
   useEffect(() => {
-    setHasUsername(localStorage.getItem('username') !== null)
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) return navigate('../sign-in')
+    setUser(user)
   }, [])
 
   return (
     <>
-      {/* this is App */}
-      {!hasUsername && <SignIn />}
-      {hasUsername && <MainScreen />}
+      {/* {user && <MainScreen />} */}
+      {/* im Apps */}
+      im app
     </>
   )
 }
