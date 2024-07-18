@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { redirect } from "react-router-dom";
+import SignIn from './pages/SignIn.jsx'
+// import SignUp from './pages/SignUp.jsx'
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  let hasUsername = localStorage.getItem('username') !== null
 
   return (
     <>
-      hi
+      {!hasUsername && <SignIn />}
     </>
   )
 }

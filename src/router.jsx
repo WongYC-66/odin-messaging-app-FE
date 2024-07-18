@@ -1,8 +1,9 @@
-import { createBrowserRouter } from "react-router-dom";
 import { createHashRouter } from "react-router-dom";
 
-import ErrorPage from './error/Error.jsx'
 import Layout from './layout/layout.jsx'
+import App from './App.jsx'
+import SignUp from './pages/SignUp.jsx'
+import ErrorPage from './error/Error.jsx'
 
 // const myRouter = createBrowserRouter([
 const myRouter = createHashRouter([
@@ -13,8 +14,12 @@ const myRouter = createHashRouter([
         errorElement: <ErrorPage />,
         children: [
             {
-                path: "contacts",
-                element: <div>hi im contact </div>,
+                index: true,
+                element: <App />
+            },
+            {
+                path: 'sign-up',
+                element: <SignUp />
             },
         ]
     },
