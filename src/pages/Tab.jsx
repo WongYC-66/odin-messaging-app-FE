@@ -7,6 +7,8 @@ export default function Tab(props) {
 
     const allChat = props.allChat
     const allProfile = props.allProfile
+    const userSelection = props.userSelection
+    const setUserSelection = props.setUserSelection
 
     console.log({ allChat, allProfile })
 
@@ -26,17 +28,19 @@ export default function Tab(props) {
             <div className="tab-content flex-fill h-100 w-100 d-flex" id="myTabContent">
 
                 {/* Chats Tab Pane */}
-                <div className="tab-pane fade show active flex-fill bg-light rounded-bottom" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabIndex="0">
+                <div className="tab-pane fade show active flex-fill bg-light rounded-bottom overflow-y-scroll" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabIndex="0" style={{ maxHeight: "75vh" }}>
                     <ul className="list-group w-100 p-3">
-                        {allChat.map(chat => <ChatCard key={chat._id} chat={chat} />)}
+                        {allChat.map(chat =>
+                            <ChatCard key={chat._id} chat={chat} userSelection={userSelection} setUserSelection={setUserSelection} />)}
                     </ul>
 
                 </div>
 
                 {/* Profile Tab Pane */}
-                <div className="tab-pane fade flex-fill bg-light rounded-bottom" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabIndex="0">
-                    <ul className="list-group w-100 p-3">
-                        {allProfile.map(profile => <ProfileCard key={profile._id} profile={profile} />)}
+                <div className="tab-pane fade flex-fill bg-light rounded-bottom overflow-y-scroll" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabIndex="0" style={{ maxHeight: "75vh" }}>
+                    <ul className="list-group w-100 p-3 ">
+                        {allProfile.map(profile =>
+                            <ProfileCard key={profile._id} profile={profile} userSelection={userSelection} setUserSelection={setUserSelection} />)}
                     </ul>
 
                 </div>
