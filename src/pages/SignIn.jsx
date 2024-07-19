@@ -11,7 +11,8 @@ export async function action({ request }) {
     const response = {
         msg: 'success',
         user: JSON.stringify({
-            username: userInfo.username
+            username: userInfo.username,
+            _id: '9527'
         })
     };
 

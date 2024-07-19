@@ -20,12 +20,12 @@ export default function ChatCard(props) {
     }
 
     return (
-        <a href="#" className={`list-group-item list-group-item-action p-1 m-0 d-flex align-items-center ${isActive ? 'active' : ''}`} onClick={cardOnClick}>
+        <Link to={`/chat/${chat._id}`} className={`list-group-item list-group-item-action p-1 m-0 d-flex align-items-center ${isActive ? 'active' : ''}`} onClick={cardOnClick}>
             <img src={isGroupChat ? groupChatIcon : iconURL} className="mx-3" width="50px" height="50px"></img>
             <div>
                 <h5 className="">{chat.room_name}</h5>
                 <p className="">{chat.last_msg}</p>
             </div>
-        </a>
+        </Link>
     );
 }

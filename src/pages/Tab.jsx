@@ -10,7 +10,7 @@ export default function Tab(props) {
     const userSelection = props.userSelection
     const setUserSelection = props.setUserSelection
 
-    console.log({ allChat, allProfile })
+    // console.log({ allChat, allProfile })
 
     return (
         // tab panel

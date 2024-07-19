@@ -2,10 +2,13 @@ import { redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 
 import Tab from './pages/Tab.jsx'
+import WindowSkel from './pages/WindowSkel.jsx'
 import WindowChat from './pages/WindowChat.jsx'
+import WindowProfile from './pages/WindowProfile.jsx'
 import { UserContext } from './layout/layout.jsx'
 
 export async function loader() {
+  console.log("running App loader")
   const allChat = [
     {
       _id: "11111",
@@ -159,7 +162,9 @@ function App() {
         userSelection={userSelection}
         setUserSelection={setUserSelection}
       />
-      <WindowChat />
+      {userSelection.type === null && <WindowSkel />}
+      {userSelection.type === "chat" && <WindowChat />}
+      {userSelection.type === "profile" && <WindowProfile />}
     </div>
   )
 }

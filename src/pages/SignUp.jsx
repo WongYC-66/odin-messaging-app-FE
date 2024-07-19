@@ -10,7 +10,8 @@ export async function action({ request, params }) {
     const response = {
         msg: 'success',
         user: {
-            username : userInfo.username
+            username : userInfo.username,
+            _id: '9527'
         }
     };
     
