@@ -1,7 +1,8 @@
 import { redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 
-import MainScreen from './pages/MainScreen.jsx'
+import Tab from './pages/Tab.jsx'
+import WindowChat from './pages/WindowChat.jsx'
 import { UserContext } from './layout/layout.jsx'
 
 export async function loader() {
@@ -24,11 +25,10 @@ function App() {
   }, [])
 
   return (
-    <>
-      {/* {user && <MainScreen />} */}
-      {/* im Apps */}
-      im app
-    </>
+    <div className="flex-fill h-100 w-100 d-flex justify-content-center">
+        <Tab />
+        <WindowChat />
+    </div>
   )
 }
 
