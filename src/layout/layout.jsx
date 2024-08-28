@@ -1,5 +1,6 @@
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import { useState, createContext } from "react";
+import API_URL from "../layout/API_URL.jsx"
 
 import logoIcon from '/logo.webp'
 
@@ -9,7 +10,19 @@ export default function Layout() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null)
 
-    const logOutButtonClick = () => {
+    const logOutButtonClick = async () => {
+
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const response = await fetch(`${API_URL}/users/sign-out/`, {
+            method: "GET",
+            headers: myHeaders,
+        });
+
+        const data = await response.json()
+        console.log(data)
+
         localStorage.removeItem('user')
         setUser(null)
         navigate('/sign-in')
@@ -28,7 +41,7 @@ export default function Layout() {
 
             {/* Main Window / Sign In / Sign Up */}
             <main className="flex-fill w-100 d-flex flex-column justify-content-center align-items-center p-5">
-                <UserContext.Provider value={{user, setUser}}>
+                <UserContext.Provider value={{ user, setUser }}>
                     {/* rendering children component */}
                     <Outlet />
                 </UserContext.Provider>

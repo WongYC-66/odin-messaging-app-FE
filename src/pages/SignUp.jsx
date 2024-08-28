@@ -1,36 +1,41 @@
-import { Form, Link, redirect } from "react-router-dom";
+import { Form, Link, redirect, useActionData } from "react-router-dom";
+import API_URL from "../layout/API_URL.jsx"
 
 export async function action({ request, params }) {
     const formData = await request.formData();
     const userInfo = Object.fromEntries(formData);
-    console.log(userInfo)
-    
-    // To-do
-    // const response = await createContact(userInfo); // hook to API
-    const response = {
-        msg: 'success',
-        user: {
-            username : userInfo.username,
-            _id: '9527'
-        }
-    };
-    
-    if (response && response.msg == 'success') {
-        localStorage.setItem('user', JSON.stringify(response.user))
+    // console.log(userInfo)
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const response = await fetch(`${API_URL}/users/sign-up/`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(userInfo),
+    });
+
+    let data = await response.json()
+    console.log(data)
+
+    if (data && data.token) {
+        localStorage.setItem('user', JSON.stringify({
+            username: userInfo.username,
+            token: data.token
+        }))
         return redirect('/')
-    } else {
-        throw new Error("Login failed, please try again")
-    }
+    } 
+
+    // Return the error data instead of redirecting, capturable at useActionData
+    return {
+        error: data.error || 'Unknown error occurred'
+    };
 }
 
 
 export default function SignUp() {
 
-    let hasUsername = localStorage.getItem('username') !== null
-    console.log(hasUsername)
-    if (hasUsername) {
-        throw new Error("Oh, you have logged in , please sign out first")
-    }
+    const actionData = useActionData();
 
     return (
         <div className="">
@@ -38,29 +43,31 @@ export default function SignUp() {
             <h1 className="text-primary mb-3">Create new account </h1>
             <h2 className="text-info mb-5">Connect easily to your friends</h2>
 
+            {actionData && actionData.error && <h5 className="text-danger">{actionData.error} </h5>}
+
             <Form method="POST">
                 <div className="form-floating my-3">
-                    <input type="text" className="form-control" id="firstName" name='firstName' placeholder="" required/>
+                    <input type="text" className="form-control" id="firstName" name='firstName' placeholder="" required />
                     <label htmlFor="firstName">First Name</label>
                 </div>
 
                 <div className="form-floating my-3">
-                    <input type="text" className="form-control" id="lastName" name='lastName' placeholder="" required/>
+                    <input type="text" className="form-control" id="lastName" name='lastName' placeholder="" required />
                     <label htmlFor="lastName">Last Name</label>
                 </div>
 
                 <div className="form-floating my-3">
-                    <input type="text" className="form-control" id="username" name='username' placeholder="" required/>
+                    <input type="text" className="form-control" id="username" name='username' placeholder="" required />
                     <label htmlFor="username">username</label>
                 </div>
 
                 <div className="form-floating my-3">
-                    <input type="password" className="form-control" id="password" name="password" placeholder="" required/>
+                    <input type="password" className="form-control" id="password" name="password" placeholder="" required />
                     <label htmlFor="password">Password</label>
                 </div>
 
                 <div className="form-floating my-3">
-                    <input type="password" className="form-control" id="confirmPassword" name="confirmPassword" placeholder="" required/>
+                    <input type="password" className="form-control" id="confirmPassword" name="confirmPassword" placeholder="" required />
                     <label htmlFor="confirmPassword">Confirm Password</label>
                 </div>
 

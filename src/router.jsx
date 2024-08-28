@@ -2,7 +2,9 @@ import { createHashRouter } from "react-router-dom";
 
 import Layout from './layout/layout.jsx'
 import App, { loader as AppLoader } from './App.jsx'
+import { loader as WindowChatLoader } from './pages/WindowChat.jsx'
 import { loader as WindowProfileLoader } from './pages/WindowProfile.jsx'
+import { loader as WindowProfileEditLoader } from './pages/WindowProfileEdit.jsx'
 import SignUp, { action as signUpAction } from './pages/SignUp.jsx'
 import SignIn, { action as signInAction } from './pages/SignIn.jsx'
 import ErrorPage from './error/Error.jsx'
@@ -25,7 +27,7 @@ const myRouter = createHashRouter([
                     {
                         path: 'chat/:chat_id',
                         element: <App />,
-                        loader: AppLoader,
+                        loader: WindowChatLoader,
                     },
                     {
                         path: 'profile/:profile_id',
@@ -35,7 +37,7 @@ const myRouter = createHashRouter([
                     {
                         path: 'profile/:username/edit',
                         element: <App />,
-                        loader: WindowProfileLoader,
+                        loader: WindowProfileEditLoader,
                     },
                     {
                         path: 'sign-up',

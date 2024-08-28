@@ -1,26 +1,7 @@
 import { Form, Link, redirect, useLoaderData, useParams } from "react-router-dom";
 import { loader as AppLoader } from "../App.jsx"
 
-export async function loader({ params }) {
-    console.log('running window profile loader')
-    const { profile_id } = params
-
-    // for App 
-    const { allChat, allProfile } = await AppLoader()
-    // todo- API to fetch  with profile_id
-    // const userProfile = await()
-    const userProfile = {
-        firstName: 'Emilia',
-        lastName: 'Clark',
-        username: 'emiliaC1356',
-        description: 'im a Emilia, nice to meet you',
-        email: 'emilia13145@gmail.com'
-    }
-
-    return { allChat, allProfile, userProfile}
-}
-
-export default function WindowProfile() {
+export default function WindowProfile(props) {
 
     const { userProfile } = useLoaderData()
 
@@ -31,6 +12,14 @@ export default function WindowProfile() {
 
     const self = JSON.parse(localStorage.getItem('user'))
     console.log({ self })
+
+    const setUserSelection = props.setUserSelection
+    
+    const editBtnOnClick = () => {
+        setUserSelection({
+            type: 'profileEdit'
+        })
+    }
 
 
     return (
@@ -58,7 +47,7 @@ export default function WindowProfile() {
 
                     {/* Buttons - Edit My Profile , Send Message */}
                     <div className="d-flex justify-content-evenly align-items-center p-3">
-                        <Link to={`/profile/${self.username}/edit`}>
+                        <Link to={`/profile/${self.username}/edit`} onClick={editBtnOnClick}>
                             <button type="button" className="btn btn-danger">Edit My Profile</button>
                         </Link>
                         <button type="button" className="btn btn-primary">Send a message</button>
@@ -69,4 +58,23 @@ export default function WindowProfile() {
             {!userProfile && <p>Loading data ... </p>}
         </div >
     );
+}
+
+export async function loader({ params }) {
+    console.log('running window profile loader')
+    const { profile_id } = params
+
+    // for App 
+    const { allChat, allProfile } = await AppLoader()
+    // todo- API to fetch  with profile_id
+    // const userProfile = await()
+    const userProfile = {
+        firstName: 'Emilia',
+        lastName: 'Clark',
+        username: 'emiliaC1356',
+        description: 'im a Emilia, nice to meet you',
+        email: 'emilia13145@gmail.com'
+    }
+
+    return { allChat, allProfile, userProfile }
 }

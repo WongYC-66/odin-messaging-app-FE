@@ -1,31 +1,44 @@
-import { Form, Link, redirect } from "react-router-dom";
+import { Form, Link, redirect, useActionData } from "react-router-dom";
+
+import API_URL from "../layout/API_URL.jsx"
 
 export async function action({ request }) {
 
     const formData = await request.formData();
     const userInfo = Object.fromEntries(formData);
-    console.log(userInfo)
+    // console.log(userInfo)
 
-    // To-do
-    // const response = await createContact(userInfo); // hook to API
-    const response = {
-        msg: 'success',
-        user: JSON.stringify({
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const response = await fetch(`${API_URL}/users/sign-in/`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(userInfo),
+    });
+
+    let data = await response.json()
+    console.log(data)
+
+    if (data && data.token) {
+        localStorage.setItem('user', JSON.stringify({
             username: userInfo.username,
-            _id: '9527'
-        })
-    };
-
-    if (response && response.msg == 'success') {
-        localStorage.setItem('user', response.user)
+            token: data.token
+        }))
         return redirect('/')
-    } else {
-        throw new Error("Login failed, please try again")
-    }
+    } 
+
+    // Return the error data instead of redirecting, capturable at useActionData
+    return {
+        error: data.error || 'Unknown error occurred'
+    };
 }
 
 export default function SignIn() {
-    
+
+    const actionData = useActionData();
+
+
     return (
         <div className="">
             <h1 className="text-primary">Hang out </h1>
@@ -33,6 +46,9 @@ export default function SignIn() {
             <h2 className="text-primary-emphasis mb-5">wherever</h2>
 
             <p className="text-primary-emphasis mb-3 w-50">MessageMe makes it easy to send a chat message to your friend or even a stranger! </p>
+
+            {actionData && actionData.error && <h5 className="text-danger">{actionData.error} </h5>}
+
 
             <Form method="POST">
                 <div className="form-floating mb-3">
