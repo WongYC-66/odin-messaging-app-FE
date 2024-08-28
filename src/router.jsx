@@ -4,7 +4,10 @@ import Layout from './layout/layout.jsx'
 import App, { loader as AppLoader } from './App.jsx'
 import { loader as WindowChatLoader } from './pages/WindowChat.jsx'
 import { loader as WindowProfileLoader } from './pages/WindowProfile.jsx'
-import { loader as WindowProfileEditLoader } from './pages/WindowProfileEdit.jsx'
+import {
+    loader as WindowProfileEditLoader,
+    action as WindowProfileEditAction,
+} from './pages/WindowProfileEdit.jsx'
 import SignUp, { action as signUpAction } from './pages/SignUp.jsx'
 import SignIn, { action as signInAction } from './pages/SignIn.jsx'
 import ErrorPage from './error/Error.jsx'
@@ -30,7 +33,7 @@ const myRouter = createHashRouter([
                         loader: WindowChatLoader,
                     },
                     {
-                        path: 'profile/:profile_id',
+                        path: 'profile/:username',
                         element: <App />,
                         loader: WindowProfileLoader,
                     },
@@ -38,6 +41,7 @@ const myRouter = createHashRouter([
                         path: 'profile/:username/edit',
                         element: <App />,
                         loader: WindowProfileEditLoader,
+                        action: WindowProfileEditAction,
                     },
                     {
                         path: 'sign-up',

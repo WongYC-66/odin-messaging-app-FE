@@ -1,38 +1,6 @@
 import { Form, Link, redirect, useActionData } from "react-router-dom";
 import API_URL from "../layout/API_URL.jsx"
 
-export async function action({ request, params }) {
-    const formData = await request.formData();
-    const userInfo = Object.fromEntries(formData);
-    // console.log(userInfo)
-
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    const response = await fetch(`${API_URL}/users/sign-up/`, {
-        method: "POST",
-        headers: myHeaders,
-        body: JSON.stringify(userInfo),
-    });
-
-    let data = await response.json()
-    console.log(data)
-
-    if (data && data.token) {
-        localStorage.setItem('user', JSON.stringify({
-            username: userInfo.username,
-            token: data.token
-        }))
-        return redirect('/')
-    } 
-
-    // Return the error data instead of redirecting, capturable at useActionData
-    return {
-        error: data.error || 'Unknown error occurred'
-    };
-}
-
-
 export default function SignUp() {
 
     const actionData = useActionData();
@@ -84,4 +52,35 @@ export default function SignUp() {
             </p>
         </div>
     );
+}
+
+export async function action({ request }) {
+    const formData = await request.formData();
+    const userInfo = Object.fromEntries(formData);
+    // console.log(userInfo)
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const response = await fetch(`${API_URL}/users/sign-up/`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(userInfo),
+    });
+
+    let data = await response.json()
+    console.log(data)
+
+    if (data && data.token) {
+        localStorage.setItem('user', JSON.stringify({
+            username: userInfo.username,
+            token: data.token
+        }))
+        return redirect('/')
+    }
+
+    // Return the error data instead of redirecting, capturable at useActionData
+    return {
+        error: data.error || 'Unknown error occurred'
+    };
 }

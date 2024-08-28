@@ -1,68 +1,20 @@
 import { redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 
-import API_URL from "./layout/API_URL.jsx"
 import Tab from './pages/Tab.jsx'
 import WindowSkel from './pages/WindowSkel.jsx'
 import WindowChat from './pages/WindowChat.jsx'
 import WindowProfile from './pages/WindowProfile.jsx'
 import WindowProfileEdit from './pages/WindowProfileEdit.jsx'
 import { UserContext } from './layout/layout.jsx'
+import API_URL from "./layout/API_URL.jsx"
 
-
-export async function loader() {
-  console.log("running App loader")
-  const user = JSON.parse(localStorage.getItem('user'));
-  console.log(user)
-  if (!user)
-    redirect('/sign-in')
-
-  const myHeaders = new Headers();
-  const token = user.token
-
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Authorization", `Bearer ${token}`);
-  console.log(myHeaders)
-
-  const fetchAllChat = async () => {
-    const response = await fetch(`${API_URL}/chats/`, {
-      method: "GET",
-      headers: myHeaders,
-    })
-
-    const data = await response.json()
-    if (data && data.allChats)
-      return data.allChats
-
-    console.error('fetch chats failed ...')
-    return []
-  }
-
-  const fetchAllProfile = async () => {
-    const response = await fetch(`${API_URL}/users/profile/`, {
-      method: "GET",
-      headers: myHeaders,
-    })
-
-    
-    const data = await response.json()
-    if (data && data.allUsers)
-      return data.allUsers
-
-    console.error('fetch profiles failed ...')
-    return []
-  }
-
-  const [allChat, allProfile] = await Promise.all([fetchAllChat(), fetchAllProfile()])
-  return { allChat, allProfile }
-}
-
-function App() {
+export default function App() {
 
   const { setUser } = useContext(UserContext)
   const { allChat, allProfile } = useLoaderData()
 
-  console.log(allChat, allProfile)
+  // console.log(allChat, allProfile)
 
   const [userSelection, setUserSelection] = useState({
     type: null,
@@ -92,4 +44,49 @@ function App() {
   )
 }
 
-export default App
+export async function loader() {
+  console.log("running App loader")
+  const user = JSON.parse(localStorage.getItem('user'));
+  // console.log(user)
+  if (!user)
+    redirect('/sign-in')
+
+  const myHeaders = new Headers();
+  const token = user.token
+
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", `Bearer ${token}`);
+
+  const fetchAllChat = async () => {
+    const response = await fetch(`${API_URL}/chats/`, {
+      method: "GET",
+      headers: myHeaders,
+    })
+
+    const data = await response.json()
+    if (data && data.allChats)
+      return data.allChats
+
+    console.error('fetch chats failed ...')
+    return []
+  }
+
+  const fetchAllProfile = async () => {
+    const response = await fetch(`${API_URL}/users/profile/`, {
+      method: "GET",
+      headers: myHeaders,
+    })
+
+
+    const data = await response.json()
+    if (data && data.allUsers)
+      return data.allUsers
+
+    console.error('fetch profiles failed ...')
+    return []
+  }
+
+  const [allChat, allProfile] = await Promise.all([fetchAllChat(), fetchAllProfile()])
+  return { allChat, allProfile }
+}
+

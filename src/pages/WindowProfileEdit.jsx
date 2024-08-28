@@ -1,61 +1,20 @@
-import { Form, Link, redirect, useLoaderData, useParams,useNavigate } from "react-router-dom";
+import { redirect, useLoaderData, useActionData, Form } from "react-router-dom";
+
 import { loader as AppLoader } from "../App.jsx"
 import API_URL from "../layout/API_URL.jsx"
-
-export async function loader({ params }) {
-    console.log('running window profile loader')
-    const { profile_id } = params
-
-    // for App 
-    const { allChat, allProfile } = await AppLoader()
-    // todo- API to fetch  with profile_id
-    // const userProfile = await()
-    const userEditProfile = {
-        firstName: 'Mr Beast',
-        lastName: 'Rock',
-        username: 'mrbeast96',
-        description: 'You know who i am, just kidding, edit me!',
-        email: 'beastrocks996@gmail.com',
-        profile_id
-    }
-
-    return { allChat, allProfile, userEditProfile }
-}
 
 export default function WindowProfileEdit(props) {
 
     const { userEditProfile } = useLoaderData()
-    const navigate = useNavigate();
 
+    const actionData = useActionData();
 
     const first = userEditProfile ? userEditProfile.firstName : ''
     const last = userEditProfile ? userEditProfile.lastName : ''
 
     const iconURL = `https://ui-avatars.com/api/?background=random&name=${first}+${last}`
 
-    const self = JSON.parse(localStorage.getItem('user'))
-    console.log({ self })
-
-    const setUserSelection = props.setUserSelection
-
-    const handleFormSubmit = async (e) => {
-        e.preventDefault()
-        console.log('submit1!')
-        // get userId
-        const user = localStorage.getItem('user')
-        console.log({user})
-
-        await fetch(`${API_URL}`)
-        setUserSelection({
-            type: 'profile',
-            id: user._id,
-        })
-        navigate(`/profile/${user._id}`);
-        // todo
-        // fetch UPDATE req
-    }
-
-    console.log({ first, last })
+    // console.log({ first, last })
 
     return (
         <div className="bg-light bg-gradient flex-shrink-1 p-3 w-50 rounded border border-1 d-flex flex-column">
@@ -64,7 +23,10 @@ export default function WindowProfileEdit(props) {
 
             {userEditProfile &&
                 < div className="flex-fill border border-1 d-flex flex-column p-3">
-                    <form>
+
+                    {actionData && actionData.error && <h5 className="text-danger">{actionData.error} </h5>}
+
+                    <Form method="PUT">
                         <div className="flex-fill">
                             <div className="d-flex align-items-center mt-5">
                                 <img src={iconURL} className="mx-3 rounded-circle" width="100px" height="100px"></img>
@@ -93,7 +55,7 @@ export default function WindowProfileEdit(props) {
                             <p className="fst-italic">Description : </p>
                             {/* Description Input */}
                             <div className="form-floating mb-3">
-                                <textarea type="email" className="form-control" id="description" name="description" placeholder="" defaultValue={userEditProfile.description} style={{height: '125px'}}/>
+                                <textarea type="email" className="form-control" id="description" name="description" placeholder="" defaultValue={userEditProfile.description} style={{ height: '125px' }} />
                                 <label htmlFor="email"> ... your's description ...</label>
                             </div>
 
@@ -102,15 +64,75 @@ export default function WindowProfileEdit(props) {
 
                         {/* Buttons - Edit My Profile , Send Message */}
                         <div className="d-flex justify-content-evenly align-items-center p-3">
-                            {/* <Link to={`/profile/${self.username}/edit`}> */}
-                                <button type="button" className="btn btn-primary" onClick={handleFormSubmit}>Update</button>
-                            {/* </Link> */}
+                            <button type="submit" className="btn btn-primary">Update</button>
                         </div>
-                    </form>
+                    </Form>
                 </div>
             }
 
             {!userEditProfile && <p>Loading data ... </p>}
         </div >
     );
+}
+
+export async function loader({ params }) {
+    console.log('running window profile loader')
+    const { username } = params
+
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    const myHeaders = new Headers();
+    const token = user.token
+
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
+    const fetchUserProfile = async () => {
+        const response = await fetch(`${API_URL}/users/profile/${username}`, {
+            method: "GET",
+            headers: myHeaders,
+        })
+
+        const data = await response.json()
+        if (data && data.queryUser)
+            return data.queryUser
+
+        console.error('fetch profile by username failed ...')
+        return []
+    }
+
+    const [{ allChat, allProfile }, userEditProfile] = await Promise.all([AppLoader(), fetchUserProfile()])
+
+    return { allChat, allProfile, userEditProfile }
+}
+
+export async function action({ request }) {
+    console.log('running window profile edit action')
+    const formData = await request.formData();
+    const userInfo = Object.fromEntries(formData);
+    // console.log(userInfo)
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = user.token
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
+    const response = await fetch(`${API_URL}/users/profile/${user.username}/`, {
+        method: "PUT",
+        headers: myHeaders,
+        body: JSON.stringify(userInfo),
+    });
+
+    let data = await response.json()
+    console.log(data)
+
+    if (data && data.updatedUser) {
+        return redirect(`/profile/${user.username}`);
+    }
+
+    // Return the error data instead of redirecting, capturable at useActionData
+    return {
+        error: data.error || 'Unknown error occurred'
+    };
 }

@@ -1,5 +1,7 @@
-import { Form, Link, redirect, useLoaderData, useParams } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
+
 import { loader as AppLoader } from "../App.jsx"
+import API_URL from "../layout/API_URL.jsx"
 
 export default function WindowProfile(props) {
 
@@ -11,10 +13,10 @@ export default function WindowProfile(props) {
     const iconURL = `https://ui-avatars.com/api/?background=random&name=${first}+${last}`
 
     const self = JSON.parse(localStorage.getItem('user'))
-    console.log({ self })
+    // console.log({ self })
 
     const setUserSelection = props.setUserSelection
-    
+
     const editBtnOnClick = () => {
         setUserSelection({
             type: 'profileEdit'
@@ -62,19 +64,32 @@ export default function WindowProfile(props) {
 
 export async function loader({ params }) {
     console.log('running window profile loader')
-    const { profile_id } = params
+    const { username } = params
+    // console.log(username)
 
-    // for App 
-    const { allChat, allProfile } = await AppLoader()
-    // todo- API to fetch  with profile_id
-    // const userProfile = await()
-    const userProfile = {
-        firstName: 'Emilia',
-        lastName: 'Clark',
-        username: 'emiliaC1356',
-        description: 'im a Emilia, nice to meet you',
-        email: 'emilia13145@gmail.com'
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    const myHeaders = new Headers();
+    const token = user.token
+
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
+    const fetchUserProfile = async () => {
+        const response = await fetch(`${API_URL}/users/profile/${username}`, {
+            method: "GET",
+            headers: myHeaders,
+        })
+
+        const data = await response.json()
+        if (data && data.queryUser)
+            return data.queryUser
+
+        console.error('fetch profile by username failed ...')
+        return []
     }
+
+    const [{ allChat, allProfile }, userProfile] = await Promise.all([AppLoader(), fetchUserProfile()])
 
     return { allChat, allProfile, userProfile }
 }
