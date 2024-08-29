@@ -10,8 +10,7 @@ export default function Tab(props) {
     const userSelection = props.userSelection
     const setUserSelection = props.setUserSelection
 
-    // console.log({ allChat, allProfile })
-
+    console.log({ allChat, allProfile })
     return (
         // tab panel
         <div className="bg-primary bg-gradient flex-shrink-1 p-3 w-50 rounded border border-1 d-flex flex-column" style={{ '--bs-bg-opacity': 0.7 }}>

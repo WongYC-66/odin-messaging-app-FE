@@ -1,46 +1,74 @@
 import { Form, Link, redirect, useLoaderData } from "react-router-dom";
+
 import { loader as AppLoader } from "../App.jsx"
+import API_URL from "../layout/API_URL.jsx"
+
 
 export default function WindowChat() {
     const { chatsInfo } = useLoaderData()
 
     const self = JSON.parse(localStorage.getItem('user'))
-    console.log({ self })
+    // console.log({ self })
+
+    if (chatsInfo) {
+        var selfId = chatsInfo.users.find(user => user.username == self.username).id
+        if (chatsInfo.isGroupChat) {
+            var roomName = 'Group Chat'
+        } else {
+            const username = localStorage.getItem('user').username
+            const { firstName, lastName } = chatsInfo.users.find(user => user.username != self.username)
+            var roomName = `${firstName} ${lastName}`
+            // https://ui-avatars.com/
+            var iconURL = `https://ui-avatars.com/api/?background=random&name=${firstName}+${lastName}`
+        }
+    }
 
     console.log(chatsInfo)
+    // return (<p>a</p>)
     return (
         <div className="bg-light bg-gradient flex-shrink-1 p-3 w-50 rounded border border-1 d-flex flex-column">
             {!chatsInfo && <p>Loading chats ... </p>}
             {chatsInfo &&
                 < div className="flex-fill border border-1 d-flex flex-column p-3">
                     {/* Chat target / Group Name */}
-                    <h4 className="text-center bg-primary py-1">{chatsInfo.room_name}</h4>
+                    <h4 className="text-center bg-primary text-white py-1">{roomName}</h4>
 
-                    <div className="flex-grow-1 overflow-y-scroll" style={{maxHeight:"55vh"}}>
-                        {chatsInfo.chats.map(({ user_id, firstName, lastName, text, timestamp }, i) => {
-                            const iconURL = `https://ui-avatars.com/api/?background=random&name=${firstName}+${lastName}`
+                    <div className="flex-grow-1 overflow-y-scroll" style={{ maxHeight: "55vh" }}>
+                        {chatsInfo.messages.map(({ text, timestamp, user }, i) => {
+                            const iconURL = `https://ui-avatars.com/api/?background=random&name=${user.firstName}+${user.lastName}`
+                            const isOther = user.username != self.username
                             return (
-                                <div className="d-flex">
-                                    {/* other's icon */}
-                                    {user_id != self._id &&
-                                        <img src={iconURL} className="mx-3 rounded-circle" width="35px" height="35px"></img>
+                                <div key={text + i}>
+                                    {/* other's icon, name and message */}
+                                    {isOther &&
+                                        <div className="d-flex my-2" >
+                                            <img src={iconURL} className="mx-3 rounded-circle" width="35px" height="35px"></img>
+                                            <div className="d-flex flex-column">
+                                                {chatsInfo.isGroupChat && <p className="m-0 p-0">{user.firstName + " " + user.lastName}</p>}
+                                                <p className="m-0 p-0 pe-3">{text}</p>
+                                            </div>
+                                        </div>
                                     }
-                                    <div className="w-100">
-                                        {/* other's name */}
-                                        {user_id != self._id && <p className="m-0 p-0">{firstName + " " + lastName}</p>}
-                                        {/* all text */}
-                                        <p className={`m-0 p-0 pe-3 ${user_id == self._id && 'text-end'}`}>{text}</p>
-                                    </div>
+                                    {/* self message */}
+                                    {
+                                        !isOther &&
+                                        <div className="d-flex my-2 mx-3 justify-content-end">
+                                            <span className="text-bg-primary text-white rounded-3 py-2 px-3 text-wrap" style={{ display: "inline-block" }}> {text} </span>
+                                        </div>
+                                    }
                                 </div>
                             )
                         })}
-                    </div>
+                    </div >
 
                     {/* textarea input and send button */}
-                    <div className="d-flex w-100 mt-5">
-                        <textarea className="flex-fill" placeholder=" enter your message here ..." style={{ resize: 'none' }} ></textarea>
-                        <button className="btn btn-primary ms-3" type="button">send</button>
-                    </div>
+                    < Form method="POST" >
+                        <div className="d-flex w-100 mt-5">
+                            <textarea className="flex-fill" placeholder=" enter your message here ..." style={{ resize: 'none' }} id="textInput" name="text" ></textarea>
+                            <input type="text" name="userId" defaultValue={selfId} hidden />
+                            <button className="btn btn-primary ms-3" type="submit">send</button>
+                        </div>
+                    </Form>
 
 
                 </div>
@@ -53,30 +81,73 @@ export async function loader({ params }) {
     console.log('running window chat loader')
     const { chat_id } = params
 
+    // console.log({ chat_id })
     // for App 
-    const { allChat, allProfile } = await AppLoader()
-    // todo- API to fetch  with chat_id
-    // const chats = await()
 
-    const chatsInfo = {
-        _id: '11111',
-        room_name: "Group Chat",
-        chats: [
-            { user_id: '9527', firstName: 'Mr', lastName: "Beast", text: "Hi im mr beast", timestamp: "2014-05-10" },
-            { user_id: '1111', firstName: 'Johnny', lastName: "Lassi", text: "Hi im johny", timestamp: "2014-05-11" },
-            { user_id: '2222', firstName: 'Emilia', lastName: "Clark", text: "Hi im emilia", timestamp: "2014-05-12" },
-            { user_id: '3333', firstName: 'Clerk', lastName: "Johnson", text: "Hi im clerk", timestamp: "2014-05-13" },
-            { user_id: '2222', firstName: 'Emilia', lastName: "Clark", text: "Hi im emilia", timestamp: "2014-05-12" },
-            { user_id: '3333', firstName: 'Clerk', lastName: "Johnson", text: "Hi im clerk", timestamp: "2014-05-13" },
-            { user_id: '2222', firstName: 'Emilia', lastName: "Clark", text: "Hi im emilia", timestamp: "2014-05-12" },
-            { user_id: '2222', firstName: 'Emilia', lastName: "Clark", text: "Hi im emilia", timestamp: "2014-05-12" },
-            { user_id: '3333', firstName: 'Clerk', lastName: "Johnson", text: "Hi im clerk", timestamp: "2014-05-13" },
-            { user_id: '3333', firstName: 'Clerk', lastName: "Johnson", text: "Hi im clerk", timestamp: "2014-05-13" },
-            { user_id: '2222', firstName: 'Emilia', lastName: "Clark", text: "Hi im emilia", timestamp: "2014-05-12" },
-            { user_id: '3333', firstName: 'Clerk', lastName: "Johnson", text: "Hi im clerk", timestamp: "2014-05-13" },
-            { user_id: '9527', firstName: 'Mr', lastName: "Beast", text: "Mr Beast rocks", timestamp: "2014-05-14" },
-        ]
+    const fetchChatInfo = async () => {
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        const myHeaders = new Headers();
+        const token = user.token
+
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", `Bearer ${token}`);
+
+
+        const response = await fetch(`${API_URL}/chats/${chat_id}`, {
+            method: "GET",
+            headers: myHeaders,
+        })
+
+        const data = await response.json()
+        if (data && data.chat)
+            return data.chat
+
+        console.error('fetch chat by chat_id failed ...')
+        return []
     }
 
+    const [{ allChat, allProfile }, chatsInfo] = await Promise.all([AppLoader(), fetchChatInfo()])
+
     return { allChat, allProfile, chatsInfo }
+
+}
+
+export async function action({ request, params }) {
+    // POST new msg action
+    console.log('running window chat action')
+    const { chat_id } = params
+
+    const formData = await request.formData();
+    const messageInfo = Object.fromEntries(formData);
+    // console.log(messageInfo)
+    // console.log(params)
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = user.token
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", `Bearer ${token}`);
+
+    const response = await fetch(`${API_URL}/chats/${chat_id}/`, {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify(messageInfo),
+    });
+
+    let data = await response.json()
+    console.log(data)
+
+    // clear textarea input
+    document.getElementById('textInput').value = ""
+
+    if (data && data.chat) {
+        return redirect(`/chat/${chat_id}`);
+    }
+
+    // Return the error data instead of redirecting, capturable at useActionData
+    return {
+        error: data.error || 'Unknown error occurred'
+    };
 }

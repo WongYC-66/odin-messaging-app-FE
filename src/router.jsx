@@ -2,7 +2,10 @@ import { createHashRouter } from "react-router-dom";
 
 import Layout from './layout/layout.jsx'
 import App, { loader as AppLoader } from './App.jsx'
-import { loader as WindowChatLoader } from './pages/WindowChat.jsx'
+import {
+    loader as WindowChatLoader,
+    action as WindowChatAction,
+} from './pages/WindowChat.jsx'
 import { loader as WindowProfileLoader } from './pages/WindowProfile.jsx'
 import {
     loader as WindowProfileEditLoader,
@@ -31,6 +34,7 @@ const myRouter = createHashRouter([
                         path: 'chat/:chat_id',
                         element: <App />,
                         loader: WindowChatLoader,
+                        action: WindowChatAction,
                     },
                     {
                         path: 'profile/:username',

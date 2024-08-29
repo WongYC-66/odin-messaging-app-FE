@@ -49,7 +49,7 @@ export async function loader() {
   const user = JSON.parse(localStorage.getItem('user'));
   // console.log(user)
   if (!user)
-    redirect('/sign-in')
+    return redirect('/sign-in')
 
   const myHeaders = new Headers();
   const token = user.token
