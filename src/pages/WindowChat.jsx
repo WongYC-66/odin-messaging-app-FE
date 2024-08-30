@@ -1,6 +1,8 @@
 import { Form, redirect, useLoaderData } from "react-router-dom";
 
 import UserListModal from "../Component/UserListModal.jsx"
+import LastLoginDot from "../Component/LastLoginDot"
+
 import { loader as AppLoader } from "../App.jsx"
 import API_URL from "../layout/API_URL.jsx"
 
@@ -17,6 +19,7 @@ export default function WindowChat() {
         } else {
             const username = localStorage.getItem('user').username
             const { firstName, lastName } = chatsInfo.users.find(user => user.username != self.username)
+            var oppositeUser = chatsInfo.users.find(user => user.username == self.username)
             var roomName = `${firstName} ${lastName}`
             // https://ui-avatars.com/
             var iconURL = `https://ui-avatars.com/api/?background=random&name=${firstName}+${lastName}`
@@ -29,9 +32,10 @@ export default function WindowChat() {
             {chatsInfo &&
                 < div className="flex-fill border border-1 d-flex flex-column p-3">
                     {/* Chat target / Group Name */}
-                    <div className="d-flex text-center bg-primary text-white py-1"> 
+                    <div className="d-flex justify-content-around align-items-center text-center bg-primary text-white py-1"> 
                         <UserListModal allProfile={chatsInfo.users}/>
                         <h4>{roomName}</h4>
+                        {!chatsInfo.isGroupChat && <LastLoginDot user={oppositeUser} />}
                     </div>
 
                     <div className="flex-grow-1 overflow-y-scroll" style={{ maxHeight: "55vh" }}>

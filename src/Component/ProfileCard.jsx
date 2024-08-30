@@ -1,5 +1,7 @@
 import { Link, } from "react-router-dom";
 
+import LastLoginDot from "../Component/LastLoginDot"
+
 export default function ChatCard(props) {
     // https://ui-avatars.com/
     const profile = props.profile
@@ -20,6 +22,7 @@ export default function ChatCard(props) {
 
     return (
         <Link to={`/profile/${profile.username}`} className={`list-group-item list-group-item-action p-1 m-0 d-flex align-items-center ${isActive ? 'active' : ''}`} onClick={cardOnClick}>
+            <LastLoginDot user={profile}/>
             <img src={iconURL} className="mx-3" width="50px" height="50px"></img>
             <h5 className="">{`${first} ${last}`}</h5>
         </Link>

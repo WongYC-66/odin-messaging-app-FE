@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom'
+
+import LastLoginDot from "../Component/LastLoginDot"
 import API_URL from "../layout/API_URL.jsx"
 
 export default function Modal(props) {
@@ -105,7 +107,8 @@ export default function Modal(props) {
                                     <div key={user.id} className="input-group my-1">
                                         <div className="input-group-text">
                                             <input className="form-check-input mt-0 me-3" type="checkbox" value={user.id} name={user.id} />
-                                            <span>{user.firstName + " " + user.lastName}</span>
+                                            <LastLoginDot user={user}/>
+                                            <span className='ms-3'>{user.firstName + " " + user.lastName}</span>
                                         </div>
                                     </div>
                                 )}
