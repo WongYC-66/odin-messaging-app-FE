@@ -5,9 +5,10 @@
   2. BackEnd (Node + Express + PostgreSQL + Prisma)
 
 # To Run :
-1. Host the backend locally at http://localhost:3000 
-2. update API_URL inside  /layout/API_URL.jsx , or the URL to ur actual hosted IP.
-3. npm run dev
+1. pre - Host the backend locally at http://localhost:3000 
+2. pre - update API_URL inside  /layout/API_URL.jsx , or the URL to ur actual hosted IP.
+3. npm install
+4. npm run dev
 
 # Live demo :
 - FrontEnd : https://wongyc-66.github.io/odin-messaging-app-FE/
