@@ -10,12 +10,16 @@ export default function Modal(props) {
     const allProfile = props.allProfile
     const setUserSelection = props.setUserSelection
 
-
-    console.log(allProfile)
-
     const handleCreateBtnClick = async () => {
 
-        const groupName = document.getElementById('groupName').value || ''
+        const groupNameInput = document.getElementById('groupName')
+        const groupName = groupNameInput.value
+        groupNameInput.value = ""       // reset input
+        if (!groupName) {
+            alert("Please enter group chat name")
+            groupNameInput.focus()
+            return
+        }
 
         const inputNodes = document.querySelectorAll('input.form-check-input')
         const userIds = [...inputNodes]
@@ -23,9 +27,9 @@ export default function Modal(props) {
                 node.checked ? arr.push(node.value) : null
                 return arr
             }, [])
-            .map(Number)
+            .map(Number);
+        [...inputNodes].forEach(node => node.checked = false)      // reset input
 
-        // console.log(userIds)
 
         const self = JSON.parse(localStorage.getItem('user'));
 
@@ -54,7 +58,7 @@ export default function Modal(props) {
             body: JSON.stringify({
                 userIds: [...userIds, selfUserId],
                 isGroupChat: true,
-                groupName:  groupName,
+                groupName: groupName,
             })
         })
 
@@ -86,9 +90,10 @@ export default function Modal(props) {
                             <div className="modal-header">
                                 {/* <h1 className="modal-title fs-5" id="staticBackdropLabel">Select users to join ... </h1> */}
 
+                                {/* Input Group Chat Name */}
                                 <div className="form-floating mb-3">
-                                    <input type="text" className="form-control" id="groupName" name="groupName" placeholder="name@example.com"/>
-                                        <label htmlFor="groupName">enter group chat name here ...</label>
+                                    <input type="text" className="form-control" id="groupName" name="groupName" placeholder="" required />
+                                    <label htmlFor="groupName">enter group chat name here ...</label>
                                 </div>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>

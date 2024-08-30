@@ -31,8 +31,8 @@ export default function SignIn() {
 
             {/* Visitor Log-in Feature */}
             <Form method="POST" className="d-inline-block">
-                <input type="text" name='username' value="visitor" hidden/>
-                <input type="password" name="password" value="visitor" hidden/>
+                <input type="text" name='username' defaultValue="visitor" hidden/>
+                <input type="password" name="password" defaultValue="visitor" hidden/>
                 <button type="submit" className="btn btn-primary my-3">or Log in as Visitor</button>
             </Form>
 
@@ -51,7 +51,6 @@ export async function action({ request }) {
 
     const formData = await request.formData();
     const userInfo = Object.fromEntries(formData);
-    // console.log(userInfo)
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -63,7 +62,6 @@ export async function action({ request }) {
     });
 
     let data = await response.json()
-    console.log(data)
 
     if (data && data.token) {
         localStorage.setItem('user', JSON.stringify({

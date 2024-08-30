@@ -14,8 +14,6 @@ export default function App() {
   const { setUser } = useContext(UserContext)
   const { allChat, allProfile } = useLoaderData()
 
-  // console.log(allChat, allProfile)
-
   const [userSelection, setUserSelection] = useState({
     type: null,
     id: null,
@@ -45,9 +43,7 @@ export default function App() {
 }
 
 export async function loader() {
-  console.log("running App loader")
   const user = JSON.parse(localStorage.getItem('user'));
-  // console.log(user)
   if (!user)
     return redirect('/sign-in')
 

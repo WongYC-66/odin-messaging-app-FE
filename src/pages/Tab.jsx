@@ -1,5 +1,3 @@
-import { Form, Link, redirect } from "react-router-dom";
-
 import ChatCard from "../Component/ChatCard";
 import ProfileCard from "../Component/ProfileCard";
 import Modal from "../Component/Modal"
@@ -11,7 +9,6 @@ export default function Tab(props) {
     const userSelection = props.userSelection
     const setUserSelection = props.setUserSelection
 
-    console.log({ allChat, allProfile })
     return (
         // tab panel
         <div className="bg-primary bg-gradient flex-shrink-1 p-3 w-50 rounded border border-1 d-flex flex-column" style={{ '--bs-bg-opacity': 0.7 }}>

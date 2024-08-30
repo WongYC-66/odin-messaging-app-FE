@@ -1,5 +1,5 @@
 import { Outlet, useNavigate, Link } from "react-router-dom";
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import API_URL from "../layout/API_URL.jsx"
 
 import logoIcon from '/logo.webp'
@@ -9,6 +9,11 @@ export const UserContext = createContext(null);
 export default function Layout() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null)
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        setUser(user)
+    }, [])
 
     const logOutButtonClick = async () => {
 
@@ -21,7 +26,6 @@ export default function Layout() {
         });
 
         const data = await response.json()
-        console.log(data)
 
         localStorage.removeItem('user')
         setUser(null)

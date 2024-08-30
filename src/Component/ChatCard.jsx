@@ -3,7 +3,7 @@ import groupChatIcon from '/group-chat.png'
 
 export default function ChatCard(props) {
     const chat = props.chat
-    // console.log(chat)
+    
     if(chat.isGroupChat){
         var roomName = chat.name
     } else {

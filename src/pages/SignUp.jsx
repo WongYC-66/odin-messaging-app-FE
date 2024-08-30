@@ -57,7 +57,6 @@ export default function SignUp() {
 export async function action({ request }) {
     const formData = await request.formData();
     const userInfo = Object.fromEntries(formData);
-    // console.log(userInfo)
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -69,7 +68,6 @@ export async function action({ request }) {
     });
 
     let data = await response.json()
-    console.log(data)
 
     if (data && data.token) {
         localStorage.setItem('user', JSON.stringify({

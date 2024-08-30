@@ -20,7 +20,7 @@ const myRouter = createHashRouter([
     {
         path: "/",
         element: <Layout />,
-        errorElement: <ErrorPage />,
+        // errorElement: <ErrorPage />,
         children: [
             {
                 errorElement: <ErrorPage />,        // error page, preserving Root UI

@@ -7,8 +7,6 @@ export default function UserListModal(props) {
 
     const self = JSON.parse(localStorage.getItem('user'))
 
-    // console.log(allProfile)
-
     return (
         <>
             {/* <!-- Button trigger modal --> */}
@@ -25,7 +23,7 @@ export default function UserListModal(props) {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            <ul class="list-group">
+                            <ul className="list-group">
                                 {allProfile.map(user =>
                                     <li key={user.id} className="list-group-item" >
                                         {user.firstName + " " + user.lastName}

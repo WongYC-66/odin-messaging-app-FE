@@ -1,4 +1,4 @@
-import { Form, Link, redirect, useLoaderData } from "react-router-dom";
+import { Form, redirect, useLoaderData } from "react-router-dom";
 
 import UserListModal from "../Component/UserListModal.jsx"
 import { loader as AppLoader } from "../App.jsx"
@@ -9,7 +9,6 @@ export default function WindowChat() {
     const { chatsInfo } = useLoaderData()
 
     const self = JSON.parse(localStorage.getItem('user'))
-    // console.log({ self })
 
     if (chatsInfo) {
         var selfId = chatsInfo.users.find(user => user.username == self.username).id
@@ -24,8 +23,6 @@ export default function WindowChat() {
         }
     }
 
-    console.log(chatsInfo)
-    // return (<p>a</p>)
     return (
         <div className="bg-light bg-gradient flex-shrink-1 p-3 w-50 rounded border border-1 d-flex flex-column">
             {!chatsInfo && <p>Loading chats ... </p>}
@@ -82,11 +79,7 @@ export default function WindowChat() {
 }
 
 export async function loader({ params }) {
-    console.log('running window chat loader')
     const { chat_id } = params
-
-    // console.log({ chat_id })
-    // for App 
 
     const fetchChatInfo = async () => {
         const user = JSON.parse(localStorage.getItem('user'));
@@ -119,13 +112,10 @@ export async function loader({ params }) {
 
 export async function action({ request, params }) {
     // POST new msg action
-    console.log('running window chat action')
     const { chat_id } = params
 
     const formData = await request.formData();
     const messageInfo = Object.fromEntries(formData);
-    // console.log(messageInfo)
-    // console.log(params)
 
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user.token
@@ -141,7 +131,6 @@ export async function action({ request, params }) {
     });
 
     let data = await response.json()
-    console.log(data)
 
     // clear textarea input
     document.getElementById('textInput').value = ""

@@ -14,8 +14,6 @@ export default function WindowProfileEdit(props) {
 
     const iconURL = `https://ui-avatars.com/api/?background=random&name=${first}+${last}`
 
-    // console.log({ first, last })
-
     return (
         <div className="bg-light bg-gradient flex-shrink-1 p-3 w-50 rounded border border-1 d-flex flex-column">
 
@@ -76,7 +74,6 @@ export default function WindowProfileEdit(props) {
 }
 
 export async function loader({ params }) {
-    console.log('running window profile loader')
     const { username } = params
 
     const user = JSON.parse(localStorage.getItem('user'));
@@ -107,10 +104,8 @@ export async function loader({ params }) {
 }
 
 export async function action({ request }) {
-    console.log('running window profile edit action')
     const formData = await request.formData();
     const userInfo = Object.fromEntries(formData);
-    // console.log(userInfo)
     const user = JSON.parse(localStorage.getItem('user'));
     const token = user.token
 
@@ -125,7 +120,6 @@ export async function action({ request }) {
     });
 
     let data = await response.json()
-    console.log(data)
 
     if (data && data.updatedUser) {
         return redirect(`/profile/${user.username}`);

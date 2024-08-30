@@ -13,7 +13,6 @@ export default function WindowProfile(props) {
     const iconURL = `https://ui-avatars.com/api/?background=random&name=${first}+${last}`
 
     const self = JSON.parse(localStorage.getItem('user'))
-    // console.log({ self })
 
     const setUserSelection = props.setUserSelection
 
@@ -46,7 +45,6 @@ export default function WindowProfile(props) {
         } else {
             return console.error(dataId.error)
         }
-        // console.log(dataId.queryUser)
 
         // POST a new chat room
         const response = await fetch(`${API_URL}/chats/`, {
@@ -109,9 +107,7 @@ export default function WindowProfile(props) {
 }
 
 export async function loader({ params }) {
-    console.log('running window profile loader')
     const { username } = params
-    // console.log(username)
 
     const fetchUserProfile = async () => {
         const user = JSON.parse(localStorage.getItem('user'));
