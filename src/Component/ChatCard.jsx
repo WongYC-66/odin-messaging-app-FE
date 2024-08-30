@@ -5,7 +5,7 @@ export default function ChatCard(props) {
     const chat = props.chat
     // console.log(chat)
     if(chat.isGroupChat){
-        var roomName = 'Group Chat'
+        var roomName = chat.name
     } else {
         const username = JSON.parse(localStorage.getItem('user')).username
         const {firstName, lastName} = chat.users.find(user => user.username != username)

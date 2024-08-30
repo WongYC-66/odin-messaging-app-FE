@@ -1,5 +1,6 @@
 import { Form, Link, redirect, useLoaderData } from "react-router-dom";
 
+import UserListModal from "../Component/UserListModal.jsx"
 import { loader as AppLoader } from "../App.jsx"
 import API_URL from "../layout/API_URL.jsx"
 
@@ -13,7 +14,7 @@ export default function WindowChat() {
     if (chatsInfo) {
         var selfId = chatsInfo.users.find(user => user.username == self.username).id
         if (chatsInfo.isGroupChat) {
-            var roomName = 'Group Chat'
+            var roomName = chatsInfo.name
         } else {
             const username = localStorage.getItem('user').username
             const { firstName, lastName } = chatsInfo.users.find(user => user.username != self.username)
@@ -31,7 +32,10 @@ export default function WindowChat() {
             {chatsInfo &&
                 < div className="flex-fill border border-1 d-flex flex-column p-3">
                     {/* Chat target / Group Name */}
-                    <h4 className="text-center bg-primary text-white py-1">{roomName}</h4>
+                    <div className="d-flex text-center bg-primary text-white py-1"> 
+                        <UserListModal allProfile={chatsInfo.users}/>
+                        <h4>{roomName}</h4>
+                    </div>
 
                     <div className="flex-grow-1 overflow-y-scroll" style={{ maxHeight: "55vh" }}>
                         {chatsInfo.messages.map(({ text, timestamp, user }, i) => {
@@ -64,7 +68,7 @@ export default function WindowChat() {
                     {/* textarea input and send button */}
                     < Form method="POST" >
                         <div className="d-flex w-100 mt-5">
-                            <textarea className="flex-fill" placeholder=" enter your message here ..." style={{ resize: 'none' }} id="textInput" name="text" ></textarea>
+                            <textarea className="flex-fill" placeholder=" enter your message here ..." style={{ resize: 'none' }} id="textInput" name="text" required></textarea>
                             <input type="text" name="userId" defaultValue={selfId} hidden />
                             <button className="btn btn-primary ms-3" type="submit">send</button>
                         </div>

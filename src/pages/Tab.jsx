@@ -2,6 +2,7 @@ import { Form, Link, redirect } from "react-router-dom";
 
 import ChatCard from "../Component/ChatCard";
 import ProfileCard from "../Component/ProfileCard";
+import Modal from "../Component/Modal"
 
 export default function Tab(props) {
 
@@ -36,7 +37,11 @@ export default function Tab(props) {
                 </div>
 
                 {/* Profile Tab Pane */}
-                <div className="tab-pane fade flex-fill bg-light rounded-bottom overflow-y-scroll" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabIndex="0" style={{ maxHeight: "75vh" }}>
+                <div className="tab-pane fade flex-fill bg-light rounded-bottom overflow-y-scroll centered-button" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabIndex="0" style={{ maxHeight: "75vh" }}>
+
+                    {/* Modal to create groupChat */}
+                    <Modal allProfile={allProfile} setUserSelection={setUserSelection}  />
+
                     <ul className="list-group w-100 p-3 ">
                         {allProfile.map(profile =>
                             <ProfileCard key={profile.id} profile={profile} userSelection={userSelection} setUserSelection={setUserSelection} />)}
@@ -44,6 +49,8 @@ export default function Tab(props) {
 
                 </div>
             </div>
+
+
         </div>
     );
 }
