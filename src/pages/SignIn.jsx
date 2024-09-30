@@ -31,9 +31,9 @@ export default function SignIn() {
 
             {/* Visitor Log-in Feature */}
             <Form method="POST" className="d-inline-block">
-                <input type="text" name='username' defaultValue="visitor" hidden/>
-                <input type="password" name="password" defaultValue="visitor" hidden/>
-                <button type="submit" className="btn btn-primary my-3">or Log in as Visitor</button>
+                <input type="text" name='username' defaultValue="guest" hidden/>
+                <input type="password" name="password" defaultValue="guest" hidden/>
+                <button type="submit" className="btn btn-primary my-3">or Guest Login</button>
             </Form>
 
             <p className="mt-3">

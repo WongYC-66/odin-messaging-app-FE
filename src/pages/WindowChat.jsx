@@ -19,7 +19,7 @@ export default function WindowChat() {
         } else {
             const username = localStorage.getItem('user').username
             const { firstName, lastName } = chatsInfo.users.find(user => user.username != self.username)
-            var oppositeUser = chatsInfo.users.find(user => user.username == self.username)
+            var oppositeUser = chatsInfo.users.find(user => user.username !== self.username)
             var roomName = `${firstName} ${lastName}`
             // https://ui-avatars.com/
             var iconURL = `https://ui-avatars.com/api/?background=random&name=${firstName}+${lastName}`
